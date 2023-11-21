@@ -1,7 +1,8 @@
 const { Thought, User, Reaction } = require('../models');
 const { Types } = require('mongoose');
 
-const thoughtController = {
+ 
+module.exports = {
     //get all thoughts
     async getAllThoughts(req, res) {
         try {
@@ -51,7 +52,7 @@ const thoughtController = {
         }
     },
     // delete by id
-    async deleteThough(req, res) {
+    async deleteThought(req, res) {
         try {
             const thought = await Thought.findByIdAndDelete({ _id: req.params.Id });
             res.status(200).json(thought);
@@ -69,23 +70,24 @@ const thoughtController = {
                 { $addToSet: { reactions: req.body } },
                 { runValidators: true, new: true }
             );
-thought ? res.json(thought) : res.status(404).json({ message: notFound });
+thought ? res.json(thought) : res.status(404).json({ message: 'Not Found' });
         } catch (e) {
     res.status(500).json(e);
 }
     },
 
     //delete reactions
-    async deleteReactions(req, res) {
+    async deleteReaction(req, res) {
         try {
             const thought = await Thought.findOneAndUpdate(
                 { _id: req.params.thoughtId },
                 { $pull: { reactions: {reactionId: req.params.reactionId } }},
                 { runValidators: true, new: true }
             );
-thought ? res.json(thought) : res.status(404).json({ message: notFound });
+thought ? res.json(thought) : res.status(404).json({ message: 'Not Found' });
         } catch (e) {
     res.status(500).json(e);
 }
     }
 };
+
